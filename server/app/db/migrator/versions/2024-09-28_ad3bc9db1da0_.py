@@ -27,7 +27,7 @@ def upgrade():
         sa.UniqueConstraint('id', name=op.f('uq__video_item__id'))
     )
     op.create_table('video_frame',
-        sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
+        sa.Column('id', postgresql.UUID(as_uuid=True), server_default=sa.text('gen_random_uuid()'), nullable=False),
         sa.Column('video_item_id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('embedding', pgvector.sqlalchemy.vector.VECTOR(dim=512), nullable=True),
         sa.ForeignKeyConstraint(['video_item_id'], ['video_item.id'], name=op.f('fk__video_frame__video_item_id__video_item')),

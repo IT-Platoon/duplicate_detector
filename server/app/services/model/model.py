@@ -1,24 +1,20 @@
-# from app.services.metaclasses import Singleton
-
 import clip
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-# import os
 import pandas as pd
-# import requests
 import torch
 
 
 from PIL import Image as PILImage
 from tqdm import tqdm
 
+from app.services.metaclasses import Singleton
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-# class ModelVideo2Frames(metaclass=Singleton):
-class ModelVideo2Frames():
+class ModelVideo2Frames(metaclass=Singleton):
     """Модель для преобразования видео в кадры."""
 
     def __init__(self):
@@ -68,14 +64,14 @@ class ModelVideo2Frames():
         frames = []
         frames, seconds_frames = self.__extract_frames(video_url, get_every_sec_frame=get_every_sec_frame)
         data = [
-            (video_url, i+1, seconds_frames[i], self.__generate_embedding(frame))
+            (video_url, video_url.split("/")[-1].split(".mp4")[0], i+1, seconds_frames[i], self.__generate_embedding(frame))
             for i, frame in enumerate(tqdm(
                 frames,
                 desc="Processing frames",
                 bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}{postfix}]")
             )
         ]
-        df = pd.DataFrame(data, columns=['video_url', "frame_number", 'timing_second', "embedding_data"])
+        df = pd.DataFrame(data, columns=['video_url', "uuid", "frame_number", 'timing_second', "embedding_data"])
         df["embedding_data"] = df["embedding_data"].apply(
             lambda vec: vec / np.linalg.norm(vec)
         )

@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.db.connection import get_session
 from app.schemas.detection import VideoLinkRequest, VideoLinkResponse
 from app.tasks import run_detection
-from app.utils.detection import get_uuid, download_video, remove_video
+from app.utils.detection import get_uuid
 
 
 api_router = APIRouter(
@@ -44,9 +44,6 @@ async def detect_duplicates(
         )
     
     uuid = get_uuid(video.link)
-    download_video(uuid, video.link, request.app.state.file_state)
 
-    result = run_detection.delay(uuid)
-
-    remove_video(uuid, request.app.state.file_state)    
+    result = run_detection.delay(uuid) 
     return result

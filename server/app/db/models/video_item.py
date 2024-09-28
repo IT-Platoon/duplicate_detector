@@ -1,5 +1,5 @@
 from sqlalchemy import Column
-from sqlalchemy.dialects.postgresql import TEXT, TIMESTAMP
+from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from .base import BaseTable
@@ -8,6 +8,12 @@ from .base import BaseTable
 class VideoItem(BaseTable):
     __tablename__ = "video_item"
 
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        unique=True,
+        doc="Unique index of element (type UUID)",
+    )
     link = Column(
         "link",
         TEXT,

@@ -17,10 +17,10 @@ asyncpg = "0.29.0"
 python-dotenv = "^0.20.0"
 celery = "5.3.1"
 redis = "^4.6.0"
-flower = "^2.0.0"
 gunicorn = "^21.2.0"
 pgvector = "^0.3.4"
 aiohttp = "^3.10.6"
+clip-openai = "^1.0.post20230121"
 
 [tool.poetry.dev-dependencies]
 ConfigArgParse = "^1.5.3"

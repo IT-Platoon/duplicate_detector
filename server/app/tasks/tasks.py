@@ -1,13 +1,13 @@
 import asyncio
 
 from app.config import celery_app
-from app.services import YOLOWrapper
+from app.services import ModelVideo2Frames
 from app.utils.celery import (
     run_detection as run_detection_async,
 )
 
 
-model = YOLOWrapper(path="./app/services/model/weights/best.pt")
+model = ModelVideo2Frames()
 
 
 @celery_app.task

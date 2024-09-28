@@ -1,6 +1,7 @@
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
 from .base import BaseTable
@@ -17,6 +18,13 @@ class VideoFrame(BaseTable):
         ),
     )
 
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        unique=True,
+        server_default=func.gen_random_uuid(),
+        doc="Unique index of element (type UUID)",
+    )
     video_item_id = Column(
         "video_item_id",
         UUID(as_uuid=True),

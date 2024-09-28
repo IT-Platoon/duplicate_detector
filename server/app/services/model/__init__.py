@@ -1,6 +1,6 @@
-from .model import YOLOWrapper
+from .model import ModelVideo2Frames
 
 
 __all__ = (
-    YOLOWrapper,
+    ModelVideo2Frames,
 )

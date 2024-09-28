@@ -1,8 +1,8 @@
 from .file_storage import FileStorageService
-from .model import YOLOWrapper
+from .model import ModelVideo2Frames
 
 
 __all__ = (
     FileStorageService,
-    YOLOWrapper,
+    ModelVideo2Frames,
 )
