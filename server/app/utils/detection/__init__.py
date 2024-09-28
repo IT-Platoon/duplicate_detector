@@ -1,6 +1,6 @@
-from .file import get_uuid
+from .tasks import run_detection_by_video
 
 
 __all__ = (
-    get_uuid,
+    run_detection_by_video,
 )

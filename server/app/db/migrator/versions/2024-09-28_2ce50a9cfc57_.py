@@ -65,11 +65,11 @@ def upgrade() -> None:
                 break
 
         for item in video_items:
-            df = model.video2frames2embeddings(
+            dataframe = model.video2frames2embeddings(
                 item["link"],
                 get_every_sec_frame=2.5,
             )
-            for index, row in df.iterrows():
+            for index, row in dataframe.iterrows():
                 row_data = {
                     "video_item_id": item["id"],
                     "embedding": row["embedding_data"],

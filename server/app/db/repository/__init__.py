@@ -1,6 +1,6 @@
-from .video_item import VideoItemRepository
+from .video_frame import VideoFrameRepository
 
 
 __all__ = (
-    "VideoItemRepository",
+    "VideoFrameRepository",
 )
