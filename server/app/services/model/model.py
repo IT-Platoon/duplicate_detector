@@ -54,14 +54,12 @@ class ModelVideo2Frames():
         cap.release()
         return frames, seconds_frames
 
-
     def __generate_embedding(self, frame: np.ndarray) -> np.ndarray:
         """Генерация эмбеддинга для кадра."""
         frame_tensor = self.preprocess(PILImage.fromarray(frame)).unsqueeze(0).to(device)
         with torch.no_grad():
             embedding = self.model.encode_image(frame_tensor).cpu().numpy()
         return embedding[0]
-
 
     def video2frames2embeddings(self, video_url: str, get_every_sec_frame: float = 1.0) -> pd.DataFrame:
         """Извлечение N кадров из видео.
@@ -70,45 +68,45 @@ class ModelVideo2Frames():
         frames = []
         frames, seconds_frames = self.__extract_frames(video_url, get_every_sec_frame=get_every_sec_frame)
         data = [
-            (video_url, i+1, seconds_frames[i], self.__generate_embedding(frame), frame)
+            (video_url, i+1, seconds_frames[i], self.__generate_embedding(frame))
             for i, frame in enumerate(tqdm(
                 frames,
                 desc="Processing frames",
                 bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}, {rate_fmt}{postfix}]")
             )
         ]
-        df = pd.DataFrame(data, columns=['video_url', "frame_number", 'timing_second', "embedding_data", 'frame_data'])
+        df = pd.DataFrame(data, columns=['video_url', "frame_number", 'timing_second', "embedding_data"])
         df["embedding_data"] = df["embedding_data"].apply(
             lambda vec: vec / np.linalg.norm(vec)
         )
         return df
 
+    @staticmethod
+    def plot_frame_by_timing(video_url: str, sec_frame: float) -> None:
+        """Рисует кадр из видео по таймнингу.
+        video_url: str | ссылка/путь на видео.
+        sec_frame: float | секунда видео, из которого показаться текущий кадр."""
 
-    def plot_frames(self, frames: list[np.ndarray]) -> None:
-        """Отрисовка кадров из видео."""
-        num_frames = len(frames)
+        # Считываем инфу о видео.
+        cap = cv2.VideoCapture(video_url)
+        frame_rate = cap.get(cv2.CAP_PROP_FPS)
 
-        if num_frames > 1:
-            fig, axes = plt.subplots(1, num_frames, figsize=(15, 5))
-            
-            for ax, frame_data in zip(axes, frames):
-                frame_data = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
-                ax.imshow(frame_data)
-                ax.axis("off")
-        else:
-            fig = plt.figure(figsize=(15, 5))
-            frame_data = cv2.cvtColor(frames[0], cv2.COLOR_BGR2RGB)
-            plt.imshow(frame_data)
-            plt.axis("off")
+        cap.set(cv2.CAP_PROP_POS_FRAMES, sec_frame * frame_rate)
+        ret, frame = cap.read()
+        cap.release()
+
+        fig = plt.figure(figsize=(5, 5))
+        frame_data = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        plt.imshow(frame_data)
+        plt.axis("off")
         plt.tight_layout()
         plt.show()
 
 
 if __name__ == '__main__':
+    video_url = 'https://s3.ritm.media/yappy-db-duplicates/2d53a527-5b97-43db-ba0c-0731edd04e9a.mp4'
+
     model = ModelVideo2Frames()
-    df = model.video2frames2embeddings(
-        'https://s3.ritm.media/yappy-db-duplicates/2d53a527-5b97-43db-ba0c-0731edd04e9a.mp4',
-        get_every_sec_frame=2.5
-    )
-    print(df.iloc[0, 2], df.iloc[1, 2], df.iloc[2, 2])
-    model.plot_frames([df.iloc[0, 4], df.iloc[10, 4]])
+    df = model.video2frames2embeddings(video_url, get_every_sec_frame=2.5)
+
+    model.plot_frame_by_timing(video_url, 25)
