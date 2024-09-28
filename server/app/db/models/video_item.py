@@ -1,6 +1,6 @@
-from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import TEXT, TIMESTAMP
+from sqlalchemy.orm import relationship
 
 from .base import BaseTable
 
@@ -18,8 +18,9 @@ class VideoItem(BaseTable):
         TIMESTAMP(timezone=True),
         nullable=False,
     )
-    embedding = Column(
-        "embedding",
-        Vector(516),
-        nullable=True,
+
+    video_frames = relationship(
+        "VideoFrame",
+        back_populates="video_item",
+        lazy="joined",
     )
