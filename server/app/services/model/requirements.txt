@@ -8,3 +8,6 @@ ftfy
 regex
 tqdm
 pandas
+pydub
+librosa
+transformers
