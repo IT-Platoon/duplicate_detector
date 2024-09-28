@@ -1,0 +1,10 @@
+matplotlib
+opencv-python-headless
+torch
+torchvision
+torchaudio
+git+https://github.com/openai/CLIP.git
+ftfy
+regex
+tqdm
+pandas

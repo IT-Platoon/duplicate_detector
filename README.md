@@ -46,3 +46,7 @@ make open-server
 ```commandline
 make help
 ```
+
+### Модели
+
+Алгоритмы и модели ИИ расположены в папке .\server\app\services\model

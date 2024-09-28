@@ -117,3 +117,5 @@ pytest-cov-report.xml
 coverage-report-html/
 
 .idea/
+
+*.mp4
