@@ -44,7 +44,7 @@ services:
       - POSTGRES_PORT=${POSTGRES_PORT}
     depends_on:
       - postgres
-    command: make run
+    command: ["./wait-for-it.sh", "postgres:${POSTGRES_PORT}", "--", "make", "run"]
   
   # redis:
   #   image: redis:6

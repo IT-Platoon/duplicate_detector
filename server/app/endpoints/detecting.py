@@ -1,5 +1,4 @@
 import asyncio
-from concurrent.futures import ProcessPoolExecutor
 
 from fastapi import (
     APIRouter,
@@ -13,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.connection import get_session
 from app.schemas.detection import VideoLinkRequest, VideoLinkResponse
-from app.utils.detection import run_detection_by_video
+from app.utils.detection import run_detection_by_video, run_detection_by_text
 
 
 api_router = APIRouter(
@@ -46,7 +45,8 @@ async def detect_duplicates(
         )
 
     detection_tasks = {
-        run_detection_by_video: request.app.state.video_detection_service
+        run_detection_by_video: request.app.state.video_detection_service,
+        run_detection_by_text: request.app.state.text_detection_service,
     }
     tasks = []
     for detection_task, model in detection_tasks.items():

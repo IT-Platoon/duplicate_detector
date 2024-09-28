@@ -3,7 +3,7 @@ from fastapi import FastAPI, exceptions, openapi
 from app.config import get_settings
 from app.endpoints import list_of_routes
 from app.schemas.application import ErrorResponse
-from app.services import FileStorageService, ModelVideo2Frames
+from app.services import FileStorageService, ModelVideo2Frames, ModelSpeech2Embedding
 from app.utils.application import validation_exception_handler
 
 
@@ -45,6 +45,7 @@ def get_app() -> FastAPI:
     )
     application.state.file_service = FileStorageService()
     application.state.video_detection_service = ModelVideo2Frames()
+    application.state.text_detection_service = ModelSpeech2Embedding()
     openapi.utils.validation_error_response_definition = ErrorResponse.schema()
     return application
 

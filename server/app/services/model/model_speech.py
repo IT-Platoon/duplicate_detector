@@ -19,7 +19,7 @@ class ModelSpeech2Embedding:
 
     def get_embedding_from_url(self, video_url):
         text = self.__speech2text(video_url)
-        print(text)
+        # print(text)
         embedding = self.__text_model.get_emb_by_text(text)
         return embedding
 
@@ -50,7 +50,7 @@ class ModelSpeech2Embedding:
 
     def __get_audio_vector(self, file_name="output.wav"):
         os.system(f'ffmpeg -i {file_name} -ar 16000 -y {file_name}')
-        data, sr = librosa.load(f'/content/{file_name}', sr=16000)
+        data, sr = librosa.load(f'{file_name}', sr=16000)
         return data, sr
 
 

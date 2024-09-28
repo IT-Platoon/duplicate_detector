@@ -11,10 +11,10 @@ class VideoFrame(BaseTable):
     __tablename__ = "video_frame"
     __table_args__ = (
         Index(
-            "ix_video_item_embedding",
+            "ix_video_item_embedding_video",
             "embedding",
-            postgresql_using='ivfflat',
-            postgresql_ops={'embedding': 'vector_l2_ops'}
+            postgresql_using='hnsw',
+            postgresql_ops={'embedding': 'vector_cosine_ops'}
         ),
     )
 

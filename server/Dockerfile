@@ -11,7 +11,10 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONBUFFERED 1
 
 COPY . ${APP_HOME}
+
 WORKDIR ${APP_HOME}
+
+RUN chmod +x wait-for-it.sh
 
 # RUN pip install poetry && \
 #     poetry config virtualenvs.create false && \

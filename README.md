@@ -49,4 +49,4 @@ make help
 
 ### Модели
 
-Алгоритмы и модели ИИ расположены в папке .\server\app\services\model
+Алгоритмы и модели ИИ расположены в папке ```server\app\services\model```

@@ -12,7 +12,7 @@ import sqlalchemy as sa
 import pgvector.sqlalchemy
 from sqlalchemy.dialects import postgresql
 
-from app.services.model import ModelVideo2Frames
+from app.services.model import ModelVideo2Frames, ModelSpeech2Embedding
 
 # revision identifiers, used by Alembic.
 revision = '2ce50a9cfc57'
@@ -26,6 +26,7 @@ TABLES = {
         sa.column('id', postgresql.UUID(as_uuid=True)),
         sa.column('link', sa.TEXT()),
         sa.column('created', postgresql.TIMESTAMP(timezone=True)),
+        sa.column('embedding_text', pgvector.sqlalchemy.vector.VECTOR(dim=768)),
     ),
     "video_frame": sa.table(
         "video_frame",
@@ -37,7 +38,8 @@ TABLES = {
 
 
 def upgrade() -> None:
-    model = ModelVideo2Frames()
+    model1 = ModelVideo2Frames()
+    model2 = ModelSpeech2Embedding()
     video_items, video_frames = [], []
     with open(f'./migrator/train.csv', newline='') as csvfile:
         table_reader = csv.reader(csvfile)
@@ -64,12 +66,17 @@ def upgrade() -> None:
             if count == 120:
                 break
 
-        for item in video_items:
-            dataframe = model.video2frames2embeddings(
+        for index, item in enumerate(video_items):
+            print(index)
+            dataframe1 = model1.video2frames2embeddings(
                 item["link"],
                 get_every_sec_frame=2.5,
             )
-            for index, row in dataframe.iterrows():
+            tensor = model2.get_embedding_from_url(
+                item["link"],
+            )
+            item["embedding_text"] = tensor
+            for index, row in dataframe1.iterrows():
                 row_data = {
                     "video_item_id": item["id"],
                     "embedding": row["embedding_data"],

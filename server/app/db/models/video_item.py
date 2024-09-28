@@ -1,3 +1,4 @@
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column
 from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
 from sqlalchemy.orm import relationship
@@ -23,6 +24,11 @@ class VideoItem(BaseTable):
         "created",
         TIMESTAMP(timezone=True),
         nullable=False,
+    )
+    embedding_text = Column(
+        "embedding_text",
+        Vector(768),
+        nullable=True,
     )
 
     video_frames = relationship(
