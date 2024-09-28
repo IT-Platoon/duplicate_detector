@@ -1,12 +1,8 @@
-# from app.services.metaclasses import Singleton
-
 import clip
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-# import os
 import pandas as pd
-# import requests
 import torch
 
 
@@ -17,12 +13,15 @@ from tqdm import tqdm
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 
-# class ModelVideo2Frames(metaclass=Singleton):
-class ModelVideo2Frames():
+class ModelVideo2Frames:
     """Модель для преобразования видео в кадры."""
 
-    def __init__(self):
-        self.model, self.preprocess = clip.load("ViT-B/32", device=device)
+    def __init__(self, model_name: str = 'ViT-B/32'):
+        """
+        RN50, RN101, RN50x4, RN50x16, RN50x64
+        ViT-B/32, ViT-B/16, ViT-L/14, ViT-L/14@336px
+        """
+        self.model, self.preprocess = clip.load(model_name, device=device)
 
     def __extract_frames(self, video_url: str, get_every_sec_frame: float = 1.0) -> list[list[np.ndarray], list[float]]:
         """См. метод video2frames2embeddings"""
