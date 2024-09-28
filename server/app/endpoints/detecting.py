@@ -2,15 +2,12 @@ import asyncio
 
 from fastapi import (
     APIRouter,
-    Depends,
     Body,
     HTTPException,
     Request,
     status,
 )
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.db.connection import get_session
 from app.schemas.detection import VideoLinkRequest, VideoLinkResponse
 from app.utils.detection import run_detection_by_video, run_detection_by_text
 
@@ -36,7 +33,6 @@ api_router = APIRouter(
 async def detect_duplicates(
     request: Request,
     video: VideoLinkRequest = Body(...),
-    session: AsyncSession = Depends(get_session),
 ):
     if not video.link:
         raise HTTPException(

@@ -19,7 +19,7 @@ class ModelSpeech2Embedding:
 
     def get_embedding_from_url(self, video_url):
         text = self.__speech2text(video_url)
-        # print(text)
+        print(text)
         embedding = self.__text_model.get_emb_by_text(text)
         return embedding
 
@@ -63,7 +63,7 @@ class TextModel:
 
     def get_emb_by_text(self, text):
         with torch.no_grad():
-            batch_tensors = self.__tokenizer(text, padding=True, truncation=True, return_tensors="pt")
+            batch_tensors = self.__tokenizer(text[0][:500], padding=True, truncation=True, return_tensors="pt")
             out = self.__bert(**batch_tensors)
             token_embs = out.last_hidden_state
             del out

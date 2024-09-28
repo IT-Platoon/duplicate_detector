@@ -66,24 +66,23 @@ def upgrade() -> None:
             if count == 120:
                 break
 
-        for index, item in enumerate(video_items):
-            print(index)
-            dataframe1 = model1.video2frames2embeddings(
-                item["link"],
-                get_every_sec_frame=2.5,
-            )
-            tensor = model2.get_embedding_from_url(
-                item["link"],
-            )
-            item["embedding_text"] = tensor
-            for index, row in dataframe1.iterrows():
-                row_data = {
-                    "video_item_id": item["id"],
-                    "embedding": row["embedding_data"],
-                }
-                video_frames.append(row_data)
-        op.bulk_insert(TABLES["video_item"], video_items)
-        op.bulk_insert(TABLES["video_frame"], video_frames)
+    for index, item in enumerate(video_items):
+        dataframe1 = model1.video2frames2embeddings(
+            item["link"],
+            get_every_sec_frame=2.5,
+        )
+        tensor = model2.get_embedding_from_url(
+            item["link"],
+        )
+        item["embedding_text"] = tensor
+        for index, row in dataframe1.iterrows():
+            row_data = {
+                "video_item_id": item["id"],
+                "embedding": row["embedding_data"],
+            }
+            video_frames.append(row_data)
+    op.bulk_insert(TABLES["video_item"], video_items)
+    op.bulk_insert(TABLES["video_frame"], video_frames)
 
 
 def downgrade() -> None:
