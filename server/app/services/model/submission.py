@@ -1,6 +1,9 @@
 import pandas as pd
-from control import ControlCenter
 
+from control import ControlCenter
+from .model import ModelVideo2Frames
+from .model_speech import ModelSpeech2Embedding
+from app.utils.detection import run_detection_by_video, run_detection_by_text
 
 df = pd.read_csv('test.csv')
 df = df.sort_values(by=['created'])
@@ -10,14 +13,17 @@ list_uuid = []
 list_link = []
 list_is_duplicate = []
 list_duplicate_for = []
+
+model1 = ModelVideo2Frames()
+model2 = ModelSpeech2Embedding()
+
 for row in df.iterrows():
-    uuid = row['link']
+    uuid = row['uuid']
     created = row['created']
     link = row['link']
 
-    # Код Назара. Система предсказывает N айдишников#
-    list_id_video = ...
-    list_id_text = ...
+    list_id_video = run_detection_by_video(link, model1)
+    list_id_text = run_detection_by_text(link, model1)
 
     result = ControlCenter.is_dublicate(
         list_id_video,
@@ -27,10 +33,10 @@ for row in df.iterrows():
         threshold=3
     )
 
-    is_duplicate = result['is_duplicate']
+    is_duplicate = result[0]
     duplicate_for = ''
     if is_duplicate:
-        duplicate_for = result['duplicate_for']
+        duplicate_for = result[1]
 
     list_created.append(created)
     list_uuid.append(uuid)

@@ -22,7 +22,7 @@ def upgrade():
     op.create_table('video_item',
         sa.Column('id', postgresql.UUID(as_uuid=True), nullable=False),
         sa.Column('link', sa.TEXT(), nullable=False),
-        sa.Column('created', postgresql.TIMESTAMP(timezone=True), nullable=False),
+        sa.Column('created', postgresql.TIMESTAMP(timezone=False), nullable=False),
         sa.Column('embedding_text', pgvector.sqlalchemy.vector.VECTOR(dim=768), nullable=True),
         sa.PrimaryKeyConstraint('id', name=op.f('pk__video_item')),
         sa.UniqueConstraint('id', name=op.f('uq__video_item__id'))

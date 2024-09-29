@@ -3,9 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .base import BaseRepository
 from app.db.models import VideoFrame
+from app.schemas.detection import VideoFrame as VideoFrameSchema
 
 
-class VideoFrameRepository(BaseRepository[VideoFrame, None, None]):
+class VideoFrameRepository(BaseRepository[VideoFrame, VideoFrameSchema, None]):
     def __init__(self):
         super().__init__(VideoFrame)
 

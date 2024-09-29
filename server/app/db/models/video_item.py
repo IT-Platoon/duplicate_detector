@@ -22,7 +22,7 @@ class VideoItem(BaseTable):
     )
     created = Column(
         "created",
-        TIMESTAMP(timezone=True),
+        TIMESTAMP(timezone=False),
         nullable=False,
     )
     embedding_text = Column(

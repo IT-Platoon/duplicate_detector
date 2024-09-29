@@ -1,9 +1,6 @@
 class ControlCenter:
     """Центр управления результатами."""
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def is_dublicate(
         list_id_video: list, list_id_text: list,
@@ -37,8 +34,7 @@ class ControlCenter:
 
         if counter[0][1] >= len(list_id_video) // threshold:
             return True, counter[0][0]
-        else:
-            return False, ''
+        return False, ''
 
 
 if __name__ == '__main__':

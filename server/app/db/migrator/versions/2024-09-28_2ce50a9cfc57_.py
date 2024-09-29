@@ -8,6 +8,7 @@ Create Date: 2024-09-28 15:34:35.890789
 import csv
 
 from alembic import op
+import numpy as np
 import sqlalchemy as sa
 import pgvector.sqlalchemy
 from sqlalchemy.dialects import postgresql
@@ -25,7 +26,7 @@ TABLES = {
         "video_item",
         sa.column('id', postgresql.UUID(as_uuid=True)),
         sa.column('link', sa.TEXT()),
-        sa.column('created', postgresql.TIMESTAMP(timezone=True)),
+        sa.column('created', postgresql.TIMESTAMP(timezone=False)),
         sa.column('embedding_text', pgvector.sqlalchemy.vector.VECTOR(dim=768)),
     ),
     "video_frame": sa.table(
@@ -63,18 +64,15 @@ def upgrade() -> None:
             video_items.append(row_data)
 
             count += 1
-            if count == 120:
+            if count == 10:
                 break
 
     for index, item in enumerate(video_items):
+        print(index)
         dataframe1 = model1.video2frames2embeddings(
             item["link"],
             get_every_sec_frame=2.5,
         )
-        tensor = model2.get_embedding_from_url(
-            item["link"],
-        )
-        item["embedding_text"] = tensor
         for index, row in dataframe1.iterrows():
             row_data = {
                 "video_item_id": item["id"],
