@@ -60,9 +60,9 @@ async def detect_duplicates(
         [],
         mul_video=1,
         mul_text=0.2,
-        threshold=2,
+        threshold=5,
     )
-    return VideoLinkResponse(is_duplicate=result[0], duplicate_for=result[1])
+    return VideoLinkResponse(is_duplicate=result[0], duplicate_for=str(result[1]))
 
 
 @api_router.post(
